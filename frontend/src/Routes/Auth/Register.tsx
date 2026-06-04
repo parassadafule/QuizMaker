@@ -217,7 +217,7 @@ export default function Register() {
                     <option value="">Select your grade</option>
                     <option value="10th">10th</option>
                     <option value="12th">12th</option>
-                    <option value="college">College</option>
+                    <option value="College">College</option>
                   </select>
                   {errors.grade && <p className="text-red-500 text-xs mt-1">{errors.grade}</p>}
                 </div>
