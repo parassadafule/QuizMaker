@@ -162,4 +162,4 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173","http://localhost:5174"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173","http://localhost:5174","https://quiz-maker-pss.vercel.app"]
