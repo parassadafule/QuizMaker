@@ -23,7 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     cnf_password = serializers.CharField(write_only=True)
     role = serializers.ChoiceField(choices=[('admin', 'Admin'), ('student', 'Student')], default='student')
     bio = serializers.CharField(required=False, allow_blank=True)
-    grade = serializers.ChoiceField(choices=[('10th', '10th'), ('12th', '12th'), ('college', 'College')], required=False)
+    grade = serializers.ChoiceField(choices=[('10th', '10th'), ('12th', '12th'), ('College', 'College')], required=False)
     institution = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
