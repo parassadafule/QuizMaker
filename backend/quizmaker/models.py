@@ -19,7 +19,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Quiz(models.Model):
-    GRADE = [('10th', '10th'), ('12th', '12th'), ('college', 'College')]
+    GRADE = [('10th', '10th'), ('12th', '12th'), ('College', 'College')]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
