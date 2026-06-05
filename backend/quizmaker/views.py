@@ -365,7 +365,7 @@ def get_attempts_by_quiz(request,quiz_id):
         quiz = Quiz.objects.get(id=quiz_id)
     except Quiz.DoesNotExist:
         return Response({"error": "Quiz not found"}, status=status.HTTP_404_NOT_FOUND)
-    attempts = QuizAttempt.objects.filter(quiz=quiz)
+    attempts = QuizAttempt.objects.filter(quiz=quiz, user=request.user)
     serializer = QuizAttemptSerializer(attempts, many=True)
     return Response(serializer.data)
 
