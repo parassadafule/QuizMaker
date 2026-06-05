@@ -184,7 +184,7 @@ export default function CreateQuiz() {
                 <option value="">Select Grade</option>
                 <option value="10th">10th</option>
                 <option value="12th">12th</option>
-                <option value="college">College</option>
+                <option value="College">College</option>
               </select>
             </div>
 
