@@ -15,7 +15,7 @@ export default function QuizShare() {
     );
   }
 
-  const shareLink = `https://quizmaker.com/quiz/${shareCode}`;
+  const shareLink = `${window.location.origin}/quiz/${shareCode}`;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
