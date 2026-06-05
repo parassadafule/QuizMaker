@@ -408,8 +408,9 @@ def evaluate_answer(request, answer_id):
             obtained_marks=obtained_marks+ans.question.marks
     attempt.result = int((obtained_marks/total_marks)*100) if total_marks>0 else 0
     attempt.save()
-    
-    return Response({"message": "Answer evaluated successfully"})
+
+    serializer = QuizAttemptSerializer(attempt)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
