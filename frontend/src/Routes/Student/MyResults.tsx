@@ -7,6 +7,8 @@ interface QuizResult {
   quiz_id: number;
   quiz_title: string;
   score: number;
+  obtained_marks: number;
+  total_marks: number;
   total_questions: number;
   date: string;
   time_taken: string | null;
@@ -56,7 +58,9 @@ export default function MyResults() {
   };
 
   const completedResults=results.filter(r=>r.status==='completed');
-  const bestScore=completedResults.length>0 ? Math.max(...completedResults.map(r => r.score)) : 0;
+  const bestScore=completedResults.length>0 ? Math.max(...completedResults.map(r => {
+    return r.total_marks>0 ? Math.round((r.obtained_marks / r.total_marks) * 100) : 0
+  })) : 0;
 
   if(isLoading) {
     return (
@@ -126,11 +130,11 @@ export default function MyResults() {
                   {result.status === 'completed' ? (
                     <div className="text-left sm:text-right">
                       <div className={`text-2xl font-bold ${getScoreColor(result.score)}`}>
-                        {result.score}%
+                        {result.total_marks > 0 ? Math.round((result.obtained_marks / result.total_marks) * 100) : 0}%
                       </div>
-                      <div className="text-sm text-slate-500">
-                        {result.score>=75 ? 'Pass' : 'Fail'}
-                      </div>
+                              <div className="text-sm text-slate-500">
+                                {result.total_marks>0 ? (Math.round((result.obtained_marks / result.total_marks) * 100) >=75 ? 'Pass' : 'Fail') : 'N/A'}
+                              </div>
                     </div>
                   ) : (
                     <div className="text-left sm:text-right">

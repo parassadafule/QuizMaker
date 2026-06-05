@@ -317,16 +317,20 @@ def get_quiz_result(request,quiz_id):
         return Response({"error": "No completed attempt found for this quiz"}, status=status.HTTP_404_NOT_FOUND)
 
     try:
-        total_questions=quiz.questions.count()
-        correct_answers=attempt.answers.filter(is_correct=True).count()
-        score=int(attempt.result) if attempt.result else 0
+        total_questions = quiz.questions.count()
+        correct_answers = attempt.answers.filter(is_correct=True).count()
 
-        analysis = []
+        # calculate marks-based score
+        total_marks = quiz.total_marks()
+        obtained_marks = 0
         pending_count = 0
+        analysis = []
         for answer in attempt.answers.all():
-            status ='correct' if answer.is_correct is True else 'incorrect' if answer.is_correct is False else 'pending'
-            if status =='pending':
+            status = 'correct' if answer.is_correct is True else 'incorrect' if answer.is_correct is False else 'pending'
+            if status == 'pending':
                 pending_count += 1
+            if answer.is_correct is True:
+                obtained_marks += answer.question.marks
             analysis.append({
                 'question_id': answer.question.id,
                 'question_text': answer.question.text,
@@ -337,8 +341,12 @@ def get_quiz_result(request,quiz_id):
                 'total_marks': answer.question.marks
             })
 
+        score = int((obtained_marks / total_marks) * 100) if total_marks > 0 else 0
+
         result_data = {
             'score': score,
+            'obtained_marks': obtained_marks,
+            'total_marks': total_marks,
             'total_questions': total_questions,
             'correct_answers': correct_answers,
             'pending_answers': pending_count,
@@ -367,10 +375,21 @@ def get_student_results(request):
     attempts = QuizAttempt.objects.filter(user=request.user).select_related('quiz')
     results = []
     for attempt in attempts:
+        # compute marks-based score
+        total_marks = attempt.quiz.total_marks()
+        obtained_marks = 0
+        for ans in attempt.answers.all():
+            if ans.is_correct is True:
+                obtained_marks += ans.question.marks
+
+        score_percent = int((obtained_marks / total_marks) * 100) if total_marks > 0 else 0
+
         results.append({
             'quiz_id': attempt.quiz.id,
             'quiz_title': attempt.quiz.title,
-            'score': attempt.result,
+            'score': score_percent,
+            'obtained_marks': obtained_marks,
+            'total_marks': total_marks,
             'total_questions': attempt.quiz.total_questions(),
             'date': attempt.completed_at.date().isoformat() if attempt.completed_at else (attempt.started_at.date().isoformat() if attempt.started_at else None),
             'status': attempt.status,

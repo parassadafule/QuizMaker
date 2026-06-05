@@ -5,6 +5,8 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface QuizResult {
   score: number;
+  obtained_marks: number;
+  total_marks: number;
   total_questions: number;
   correct_answers: number;
   pending_answers: number;
@@ -80,7 +82,7 @@ export default function Result() {
     );
   }
 
-  const percentage = Math.round((result.correct_answers / result.total_questions) * 100);
+  const percentage = result.total_marks > 0 ? Math.round((result.obtained_marks / result.total_marks) * 100) : 0;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8">
